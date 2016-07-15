@@ -113,7 +113,7 @@ var game = {
       // If Level less than 30, get array of guard positions
       var pattern;
       if (game.level === 1) {
-        //do nothing
+        // Do nothing
       } else if (game.level <= 30 && game.level > 1){
         pattern = game.guardpositions[game.level-2];
       // Else, get random array
@@ -121,13 +121,15 @@ var game = {
         pattern = game.guardpositions[game.randomNumber(30) - 1];
       }
       // Add Guards
-      for (var a = 0; a <= pattern.length - 1; a++){
-        //Get Element in itemGrid
-        var gridpos = game.itemGrid[pattern[a]];
-        allGuards.push(new Guard(gridpos[0],gridpos[1]));
-        console.log('Guard added');
-        // Add Patter elements to usedGrid
-        game.usedGrid.push(pattern[a]);
+      if (pattern != undefined){ // This if line prevents error when game is reset
+        for (var a = 0; a <= pattern.length - 1; a++){
+            //Get Element in itemGrid
+            var gridpos = game.itemGrid[pattern[a]];
+            allGuards.push(new Guard(gridpos[0],gridpos[1]));
+            console.log('Guard added');
+            // Add Patter elements to usedGrid
+            game.usedGrid.push(pattern[a]);
+        }
       }
     },
     startModal: function(){
