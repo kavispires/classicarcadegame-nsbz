@@ -31,6 +31,14 @@ var game = {
     {
         sprite: 'images/cd-gold.png',
         points: 20,
+    },
+    {
+        sprite: 'images/cd-cyan.png',
+        points: 25,
+    },
+    {
+        sprite: 'images/cd-red.png',
+        points: 30,
     }],
     // Array that keeps track of elements in the game
     usedGrid: [],
@@ -47,13 +55,13 @@ var game = {
         var chance = Math.floor(Math.random() * 100) + 1;
         chance += game.level * 2;
         if(chance > 0 && chance <= 50){ // 50% of slow enemy
-          console.log(chance+'% of evil. Slow red bug appears.');
+          console.log(chance+'% of love. Fan throws sharpy love letter.');
           return 0;
         } else if (chance >= 51 && chance <= 90){ // 30% chance of faster enemy
-          console.log(chance+'% of evil. Wild yellow bug appears.');
+          console.log(chance+'% of evil. Fan throws smelly panties.');
           return 1;
         } else { // 20% of fastest enemy
-          console.log(chance+'% of evil. Crazy purple bug appers.');
+          console.log(chance+'% of evil. Jealous boyfriend throws empty bottle.');
           return 2;
         }
     },
@@ -63,8 +71,12 @@ var game = {
         allGems = [new Gem(0)];
       } else if (game.level > 5 && game.level <= 10){
         allGems = [new Gem(0), new Gem(1)];
-      } else {
+      } else if (game.level > 10 && game.level <= 30){
         allGems = [new Gem(0), new Gem(1), new Gem(2)];
+      } else if (game.level > 30 && game.level <= 40){
+        allGems = [new Gem(0), new Gem(1), new Gem(2), new Gem(3)];
+      } else {
+        allGems = [new Gem(0), new Gem(1), new Gem(2), new Gem(3), new Gem(4)];
       }
     },
     removeGem: function(index,pos){
@@ -352,7 +364,7 @@ Player.prototype.resetPosition = function(val) {
     }
     if (game.lives <= 0) {
         console.log('GAME OVER');
-        $('.helper').text('Game Over. Avoid the Hazards. Try again! GO!')
+        $('.helper').text('Game Over. High Score: '+ game.score);
         game.level = 0;
         game.lives = 3;
         game.score = 0;

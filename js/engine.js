@@ -198,6 +198,8 @@ var Engine = (function(global) {
         'images/cd-grey.png',
         'images/cd-green.png',
         'images/cd-gold.png',
+        'images/cd-cyan.png',
+        'images/cd-red.png',
         'images/char-security.png',
     ]);
     Resources.onReady(init);
