@@ -1,7 +1,7 @@
 /* Engine.js
  * This file provides the game loop functionality (update entities and render),
  * draws the initial game board on the screen, and then calls the update and
- * render methods on your player and enemy objects (defined in your app.js).
+ * render methods on your player and hazard objects (defined in your app.js).
  *
  * A game engine works by drawing the entire game screen over and over, kind of
  * like a flipbook you may have created as a kid. When your player moves across
@@ -86,21 +86,21 @@ var Engine = (function(global) {
     }
 
     /* This is called by the update function and loops through all of the
-     * objects within your allEnemies array as defined in app.js and calls
+     * objects within your allHazards array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
      * player object. These update methods should focus purely on updating
      * the data/properties related to the object. Do your drawing in your
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
+        allHazards.forEach(function(hazard) {
+            hazard.update(dt);
         });
-        allGems.forEach(function(gem) {
-            gem.update(dt);
+        allCDs.forEach(function(cd) {
+            cd.update(dt);
         });
-        allRocks.forEach(function(rock) {
-            rock.update(dt);
+        allGuards.forEach(function(guard) {
+            guard.update(dt);
         });
         player.update();
         stats.update();
@@ -151,20 +151,20 @@ var Engine = (function(global) {
 
     /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
+     * on your hazard and player entities within app.js
      */
     function renderEntities() {
-        /* Loop through all of the objects within the allEnemies array and call
+        /* Loop through all of the objects within the allHazards array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
+        allHazards.forEach(function(hazard) {
+            hazard.render();
         });
-        allGems.forEach(function(gem) {
-            gem.render();
+        allCDs.forEach(function(cd) {
+            cd.render();
         });
-        allRocks.forEach(function(rocks) {
-            rocks.render();
+        allGuards.forEach(function(guards) {
+            guards.render();
         });
 
         player.render();
