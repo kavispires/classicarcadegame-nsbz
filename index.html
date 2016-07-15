@@ -2,17 +2,82 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Effective JavaScript: Frogger</title>
+    <title>NSBZ: REACH THE STAGE!</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-	<p class="helper">Collect the CDs and reach the stage! Avoid hazards! GO!</p>
+	<div class="topbar"><p><span class="music-icon glyphicon glyphicon-volume-up pull-left"></span>  <span class="helper">Collect the CDs and reach the stage! Avoid hazards! GO!</span></p></div>
 
-	<audio src="sfx/song.mp3" controls autoplay loop>
-		Your browser does not support the audio HTML5 element.
-	</audio>
-	<div class="sfx"></div>
+	<div id="modal-start" class="modal fade">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title">Hello Nerdstreet Boy!</h4>
+	      </div>
+	      <div class="modal-body text-center">
+	      	<img class="img-responsive banner" src="images/banner.png" alt="NSBZ Game Banner">
+			<ul class="text-left">
+				<li>Help one of the Nerdstreet Boyz to reach the stage.</li>
+				<li>You need to collect all the CDs <img src="images/icon-cd.png" alt="cd" class="img-inline"> on the screen in order to be allowed on stage, after all, the Nerdstreet Boys don't sing live, they need the playback cds.</li>
+				<li>But watch out for hazards! Crazy fans throw sharpy love letters <img src="images/icon-loveletter.png" alt="fan's letter" class="img-inline"> and panties <img src="images/icon-panties.png" alt="fan's panties" class="img-inline">all the time, and sometime even a plastic bottle <img src="images/icon-bottle.png" alt="bottle" class="img-inline"> is thrown by a jealous boyfriend.</li>
+				<li>The security guys <img src="images/icon-security.png" alt="security guard" class="img-inline"> are there to help. Eh... I mean, they actually just block the way.</li>
+				<h4 class="text-center">Good luck and have a great concert!</h4>
+			</ul>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="start-game">Start</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<div id="modal-gameover" class="modal fade">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title">GAME OVER</h4>
+	      </div>
+	      <div class="modal-body text-center">
+	      	<img class="img-responsive banner" src="images/banner-gameover.png" alt="NSBZ Game Banner">
+				<h3>High Score: <span id="highscore">?</span></h3>
+				<h4 class="text-center">Try again!!</h4>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="start-game">Restart</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+	<div id="modal-pause" class="modal fade">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h4 class="modal-title">PAUSE</h4>
+	      </div>
+	      <div class="modal-body text-center">
+	      	<img class="img-responsive banner" src="images/banner-switch.png" alt="NSBZ Game Banner">
+	      	<button type="button" class="btn btn-secondary" id="other-character">Switch Character</button>
+	      	<p>Your Nerdstreet Boy still gonna be at random, but you may have a chance to play with sexy J. Brian or provocative W. Patrick.</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="unpause">Continue</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+	<div class="audio">
+		<audio id="music" src="sfx/song.mp3" controls autoplay loop></audio>
+		<audio id="sfx-damage" src='sfx/damage.mp3' hidden=true autostart=false loop=false></audio>
+		<audio id="sfx-cd" src='sfx/cd.mp3' hidden=true autostart=false loop=false></audio>
+		<audio id="sfx-levelup" src='sfx/levelup.mp3' hidden=true autostart=false loop=false></audio>
+	</div>
+
 	<script src="js/jquery-1.11.2.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>

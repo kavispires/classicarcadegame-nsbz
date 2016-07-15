@@ -8,8 +8,21 @@ var game = {
     level: 1,
     lives: 3,
     score: 0,
-    gems: [],
-    player: ['images/char-pat.png', 'images/char-bri.png'],
+    player: ['images/char-pat.png', 'images/char-bri.png','images/char-pat2.png', 'images/char-bri2.png','images/char-pat3.png', 'images/char-bri3.png'],
+    selectedCharacter: 0,
+    // Sounds
+    sfx: true,
+    music: true,
+    // play/pause song
+    mute: function(){
+        var m = document.getElementById("music");
+        if (game.music == false) {
+          m.pause();
+        } else {
+          m.play();
+        }
+    },
+    // Other
     enemies: [{
         sprite: 'images/hazard-loveletter.png',
         speed: 50.5,
@@ -20,6 +33,7 @@ var game = {
         sprite: 'images/hazard-bottle.png',
         speed: 303,
     }],
+    gems: [],
     items: [{
         sprite: 'images/cd-grey.png',
         points: 5,
@@ -98,7 +112,9 @@ var game = {
       game.usedGrid = [];
       // If Level less than 30, get array of rock positions
       var pattern;
-      if (game.level <= 30){
+      if (game.level === 1) {
+        //do nothing
+      } else if (game.level <= 30 && game.level > 1){
         pattern = game.rockpositions[game.level-2];
       // Else, get random array
       } else {
@@ -113,6 +129,15 @@ var game = {
         // Add Patter elements to usedGrid
         game.usedGrid.push(pattern[a]);
       }
+    },
+    startModal: function(){
+    //Hide Modal
+    $('.modal').modal('hide');
+    //Star Game
+    game.pause = false;
+    },
+    switchCharacter: function(){
+        player.sprite = game.player[game.randomNumber(6) - 1];
     }
 }
 
@@ -198,7 +223,12 @@ Gem.prototype.update = function() {
             }
           }.bind(this));
           console.log('Gem collected!');
-          $('.sfx').html("<embed src='sfx/cd.mp3' hidden=true autostart=true loop=false>");
+          // If sfx is on, play sound
+          if(game.sfx == true) {
+            var m = document.getElementById("sfx-cd");
+            m.play();
+            m.loop = false;
+        }
     }
 }
 
@@ -310,7 +340,7 @@ var Player = function() {
     this.x = this.player_start_x;
     this.y = this.player_start_y;
     // Player Sprite
-    this.sprite = game.player[game.randomNumber(2) - 1];
+    this.sprite = game.player[game.randomNumber(6) - 1];
     // Play Direction
     this.direction = null;
 }
@@ -350,30 +380,58 @@ Player.prototype.resetPosition = function(val) {
         case 'levelup':
             game.level++;
             game.score += 50;
-            console.log('Reached Top! Level up!');
+            $('.helper').text('You reached the Stage! Level up!');
             game.addRock();
             game.addGem();
-            $('.sfx').html("<embed src='sfx/levelup.mp3' hidden=true autostart=true loop=false>");
+            // If sfx is on, play sound
+            if(game.sfx == true) {
+                var m = document.getElementById("sfx-levelup");
+                m.play();
+                m.loop = false;
+            }
+            // If level 10, 20, 30... give one life
+            if(game.level % 10 == 0 && game.lives < 3){
+                game.lives++;
+                $('.helper').text("You reached the Stage! Here's an extra heart.");
+            }
+            setTimeout(function(){
+                $('.helper').text('Go!');
+            }, 1500);
             break;
         case 'damage':
             game.lives--;
             game.score -= 25;
             console.log('Damage!');
             $('.helper').text('You took damage.');
-            $('.sfx').html("<embed src='sfx/damage.mp3' hidden=true autostart=true loop=false>");
+            // If sfx is on, play sound
+            if(game.sfx == true) {
+                var m = document.getElementById("sfx-damage");
+                m.play();
+                m.loop = false;
+            }
     }
     if (game.lives <= 0) {
         console.log('GAME OVER');
         $('.helper').text('Game Over. High Score: '+ game.score);
+        // Open modal
+        $('#modal-gameover').modal('show');
+        // Write High Score
+        $('#highscore').text(game.score);
+        // Reset Everything
         game.level = 0;
         game.lives = 3;
         game.score = 0;
+        game.gems = [];
+        game.usedGrid = [];
+        game.gemGrid= [];
         // Remove all enemies, and create one new enemy
         allEnemies = [new Enemy()];
         // Remove all gems, then create one new gem
         allGems = [new Gem()];
         // Remove all rocks
         allRocks = [];
+        // Assign a different skin
+        this.sprite = game.player[game.randomNumber(6) - 1];
     }
 }
 
@@ -402,6 +460,11 @@ Player.prototype.handleInput = function(key) {
 var allEnemies = [new Enemy()];
 var allGems = [new Gem()];
 var allRocks = [];
+
+//pause game and call modal
+game.pause = true;
+$('#modal-start').modal('show');
+
 var player = new Player();
 var stats = new Stats();
 
@@ -414,15 +477,53 @@ document.addEventListener('keyup', function(e) {
         38: 'up',
         39: 'right',
         40: 'down',
-        18: 'p'
+        18: 'p',
+        77: 'm',
+        70: 'f'
     };
+
+    // Toggle Music
+    if (e.keyCode === 77) {
+        game.music = !game.music;
+        game.mute();
+    }
 
     //Pause Game
     if (e.keyCode === 32 || e.keyCode === 18) {
         game.pause = !game.pause;
+        $('#modal-pause').modal('show');
     }
 
     if (game.pause === false) {
         player.handleInput(allowedKeys[e.keyCode]);
     }
+});
+
+// When Music icon is pressed
+$('.music-icon').on('click', function(){
+    // Toggle Music and Sfx
+    game.music = !game.music;
+    game.sfx = !game.sfx;
+    game.mute();
+    //Change icon
+    $(this).toggleClass('glyphicon-volume-up');
+    $(this).toggleClass('glyphicon-volume-off');
+});
+
+//Close modal and start game
+$('#start-game').on('click', function(){
+    game.startModal();
+});
+
+//Close modal and start game
+$('.modal').on('click', function(){
+    game.startModal();
+});
+
+$('#unpause').on('clock', function(){
+    game.pause = false;
+});
+
+$('#other-character').on('click', function(){
+    game.switchCharacter();
 });

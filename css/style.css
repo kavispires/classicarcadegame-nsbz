@@ -3,7 +3,7 @@ body {
     background: #999;
 }
 
-.helper {
+.topbar {
 	width: 505px;
 	text-align: center;
 	margin: 0 auto;
@@ -13,12 +13,27 @@ body {
 	-webkit-border-top-left-radius: 5px;
 	-webkit-border-top-right-radius: 5px;
 }
+.topbar p {
+	margin: 0;
+}
+.music-icon {
+	margin-left: 10px;
+}
 
-audio {
+.audio {
+	width:0;
+	height:0;
+}
+
+#music {
 	display: none;
 }
 
-.sfx {
-	width:0;
-	height:0;
+.banner {
+	margin: 0 auto;
+}
+
+.img-inline {
+	display: inline-block;
+	height: 16px;
 }
