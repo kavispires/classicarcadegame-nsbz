@@ -1,0 +1,20 @@
+body {
+    text-align: center;
+    background: #999;
+}
+
+.helper {
+	width: 505px;
+	text-align: center;
+	margin: 0 auto;
+	background: #fff;
+}
+
+audio {
+	display: none;
+}
+
+.sfx {
+	width:0;
+	height:0;
+}
