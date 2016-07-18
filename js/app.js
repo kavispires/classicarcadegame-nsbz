@@ -1,3 +1,6 @@
+/**
+* @description Class Game that holds all basic info about the game.
+*/
 var Game = function() {
     this.pause = false;
     // Units
@@ -47,22 +50,39 @@ var Game = function() {
     }];
     // Array that keeps track of CD count in level
     this.collectedCds = [];
-    // Array that keeps track of elements in the game
+    // Array that keeps track of elements in the game preventing Guards and Cds to ocupied the same space
     this.usedGrid = [];
     // Array that keeps track only of cds only
     this.cdGrid = [];
+    // Array of possible placements for items (cds and guards)
     this.itemGrid = [[0,1],[1,1],[2,1],[3,1],[4,1],[0,2],[1,2],[2,2],[3,2],[4,2],[0,3],[1,3],[2,3],[3,3],[4,3]];
+    // Guards positions follows a pattern so the game is always 'completable'
     this.guardpositions = [[12],[6,8],[0,4],[7],[5,9],[11,13],[2],[1,3],[10,14],[2,12],[7,11,13],[0,10],[5,2,9],[4,14],[5,9,12],[1,11],[0,12,10],[3,13],[0,4,11,13],[0,4,10,14],[0,2,4,12],[10,12,14,13],[10,11,13,14],[0,2,4,11,13],[0,1,3,4],[10,1,12,3,14],[0,1,3,4,5,9],[0,1,3,4,5,9,10,12,14],[0,1,2,4,5,9,10,12,13,14]];
 };
 
+/**
+* @description Randomizes Number
+* @param {number} num
+* @returns {number} Random Number from 1 to the number provided
+*/
 Game.prototype.randomNumber = function(num) {
     return Math.floor(Math.random() * num) + 1;
 };
 
+/**
+* @description Randomizes Number in a range
+* @param {number} start
+* @param {number} end
+* @returns {number} Random Number in provided range
+*/
 Game.prototype.randomRange = function(start, end) {
     return Math.floor(Math.random() * (end - start)) + 1;
 };
 
+/**
+* @description Randomizes Hazard type on a 1/100 chance plus game.level. Making higher levels return faster enemies
+* @returns {number} Random Number from 0 to 2
+*/
 Game.prototype.randomType = function() {
     // Assign Random Hazard Type
     var chance = Math.floor(Math.random() * 100) + 1;
@@ -79,18 +99,18 @@ Game.prototype.randomType = function() {
     }
 };
 
+/**
+* @description Play/Pause main song in the index page
+*/
 Game.prototype.mute = function(){
-    // Play/Pause song
-    var song = document.getElementById("music");
-    if (game.music === false) {
-        song.pause();
-    } else {
-        song.play();
-    }
+    var song = document.getElementById('music');
+    return game.music ? song.play() : song.pause();
 };
 
+/**
+* @description Adds CDs based on level number
+*/
 Game.prototype.addCD = function(){
-    // Add CDs based on Level Number
     if (game.level <= 5){
         allCDs = [new CD(0)];
     } else if (game.level > 5 && game.level <= 10){
@@ -104,6 +124,9 @@ Game.prototype.addCD = function(){
     }
 };
 
+/**
+* @description Removes cds from their arrays that keeps track of them, and from allCDs. Adds 10 points to score per cd collected.
+*/
 Game.prototype.removeCD = function(index,pos){
     // Remove from cdGrid and usedGrid
     var r = game.cdGrid.indexOf(pos);
@@ -116,6 +139,9 @@ Game.prototype.removeCD = function(index,pos){
     game.score += 10;
 };
 
+/**
+* @description Adds Guards to the game based on level number.
+*/
 Game.prototype.addGuard = function() {
     // Remove all guards
     allGuards = [];
@@ -144,6 +170,9 @@ Game.prototype.addGuard = function() {
     }
 };
 
+/**
+* @description Closes modal window and unpauses game.
+*/
 Game.prototype.startModal = function(){
     //Hide Modal
     $('.modal').modal('hide');
@@ -151,38 +180,48 @@ Game.prototype.startModal = function(){
     game.pause = false;
 };
 
+/**
+* @description Randomizes Number in a range
+*/
 Game.prototype.switchCharacter = function(){
     player.sprite = game.player[game.randomNumber(6) - 1];
 };
 
-// Game Stats to keep track of level and lives
+/**
+* @description Class Stats to keep on-screen track of level and lives
+*/
 var Stats = function() {
     this.life = 'images/life-on.png';
     this.lifeOff = 'images/life-off.png';
     this.level = game.level;
 };
 
+/**
+* @description Add Hazards to the game (through allHazards) based on level number in a 37.5% ratio, meaning that it's likely a new enemy will show up every 2 or 3 levels.
+*/
 Stats.prototype.update = function() {
-    // Add/Remove Hazards based on Level Number
     var ratio = game.level * 0.375;
     if (ratio > allHazards.length){
         allHazards.push(new Hazard());
     }
 };
 
+/**
+* @description Writes Stats on screen.
+*/
 Stats.prototype.render = function() {
-    ctx.font = "20px Verdana";
-    ctx.fillStyle = "#000";
-    ctx.strokeStyle = "#000";
-    ctx.textAlign = "center";
+    ctx.font = '20px Verdana';
+    ctx.fillStyle ='#000';
+    ctx.strokeStyle = '#000';
+    ctx.textAlign = 'center';
 
     // Update Level
-    ctx.fillText("LEVEL " + game.level, 252.5, 35);
-    ctx.strokeText("LEVEL " + game.level, 252.5, 35);
+    ctx.fillText('LEVEL ' + game.level, 252.5, 35);
+    ctx.strokeText('LEVEL ' + game.level, 252.5, 35);
 
     // Update Level
-    ctx.fillText(game.score + " pts", 454.5, 35);
-    ctx.strokeText(game.score + " pts", 454.4, 35);
+    ctx.fillText(game.score + ' pts', 454.5, 35);
+    ctx.strokeText(game.score + ' pts', 454.4, 35);
 
     // Draw Fuel (Lives) Icons
     ctx.drawImage(Resources.get(this.lifeOff), 10, 0);
@@ -201,6 +240,9 @@ Stats.prototype.render = function() {
     }
 };
 
+/**
+* @description Class CD for the collectable items on screen (cds)
+*/
 var CD = function(type) {
     this.type = type;
     if(type === undefined){
@@ -228,6 +270,9 @@ var CD = function(type) {
     this.sprite = game.items[this.type].sprite;
 };
 
+/**
+* @description Detects CD collecting by the player and removes it when done.
+*/
 CD.prototype.update = function() {
     // Collect Detection
     if (player.y === this.y && player.x === this.x){
@@ -239,17 +284,25 @@ CD.prototype.update = function() {
         console.log('CD collected!');
     // If sfx is on, play sound
         if(game.sfx === true) {
-            var m = document.getElementById("sfx-cd");
+            var m = document.getElementById('sfx-cd');
             m.play();
             m.loop = false;
         }
     }
 };
 
+/**
+* @description Renders CDs on screen.
+*/
 CD.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+/**
+* @description Class for Guards (elements that blocks the player in the game grid)
+* @param {number} x - his x position in the grid
+* @param {number} y - his y position in the grid
+*/
 var Guard = function(x,y) {
     this.x = x * game.xUnit;
     this.y = y * game.yUnit;
@@ -257,29 +310,35 @@ var Guard = function(x,y) {
     this.sprite = 'images/char-security.png';
 };
 
+/**
+* @description Prevents player from crossing over a Guard
+*/
 Guard.prototype.update = function() {
     // Block detection
     if (player.y === this.y && player.x === this.x){
-        if(player.direction == "up"){
+        if(player.direction == 'up'){
             player.y += 83;
-        } else if(player.direction == "right"){
+        } else if(player.direction == 'right'){
             player.x -= 101;
-        } else if(player.direction == "down"){
+        } else if(player.direction == 'down'){
             player.y -= 83;
-        } else if(player.direction == "left"){
+        } else if(player.direction == 'left'){
             player.x += 101;
         }
     }
 };
 
+/**
+* @description Renders Guards on screen.
+*/
 Guard.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Hazards our player must avoid
+/**
+* @description Class for Hazards on screen (love letters, panties and bottles)
+*/
 var Hazard = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     // Assign Hazard Type
     this.type = game.randomType();
     // Assign Starting Position
@@ -291,8 +350,10 @@ var Hazard = function() {
     this.sprite = game.hazards[this.type].sprite;
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+/**
+* @description Updates Hazard position, detects collision with player, and reassign a new row for the enemy to respawn, as well as, when the hazard will show up on screen (by assigning a -x off screen value to it)
+* @param {number} dt
+*/
 Hazard.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
@@ -307,13 +368,13 @@ Hazard.prototype.update = function(dt) {
         var i;
         switch(this.type){
             case 0:
-            i = 3;
-            break;
+                i = 3;
+                break;
             case 1:
-            i = 5;
-            break;
+                i = 5;
+                break;
             case 2:
-            i = 7;
+                i = 7;
         }
     this.x = game.xUnit * game.randomNumber(i) * -2;
     }
@@ -326,14 +387,16 @@ Hazard.prototype.update = function(dt) {
     }
 };
 
-// Draw the enemy on the screen, required method for game
+/**
+* @description Renders Hazard on screen
+*/
 Hazard.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+/**
+* @description Class for Player
+*/
 var Player = function() {
     // Type
     this.type = 0;
@@ -357,6 +420,9 @@ var Player = function() {
     this.direction = null;
 };
 
+/**
+* @description Limits player on off-screen movements, and check winning conditions.
+*/
 Player.prototype.update = function(dt) {
     // Limit player into boundaries
     if (this.x > this.player_limit_right) {
@@ -385,6 +451,10 @@ Player.prototype.update = function(dt) {
     }
 };
 
+/**
+* @description Resets player position depending if he took damaged or passed the level. Also, it checks for Game Over conditions.
+* @param {string} levelup or damage
+*/
 Player.prototype.resetPosition = function(val) {
     // Reset Position after 0.25s
     this.x = this.player_start_x;
@@ -399,7 +469,7 @@ Player.prototype.resetPosition = function(val) {
             game.addCD();
             // If sfx is on, play sound
             if(game.sfx === true) {
-                var m = document.getElementById("sfx-levelup");
+                var m = document.getElementById('sfx-levelup');
                 m.play();
                 m.loop = false;
             }
@@ -419,7 +489,7 @@ Player.prototype.resetPosition = function(val) {
             $('.helper').text('You took damage.');
             // If sfx is on, play sound
             if(game.sfx === true) {
-                var n = document.getElementById("sfx-damage");
+                var n = document.getElementById('sfx-damage');
                 n.play();
                 n.loop = false;
             }
@@ -450,10 +520,17 @@ Player.prototype.resetPosition = function(val) {
     }
 };
 
+/**
+* @description Renders Player on screen.
+*/
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+/**
+* @description Moves player in canvas
+* @param {string} key - key pressed by user
+*/
 Player.prototype.handleInput = function(key) {
     // Object with direction coordinates
     var direction = {
@@ -479,12 +556,10 @@ var allGuards = [];
 var player = new Player();
 var stats = new Stats();
 
-//Pause the Game and Start Modal
-game.pause = true;
-$('#modal-start').modal('show');
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+/**
+* @description Listens for key presses and sends the keys to your Player.handleInput() method.
+* @param {number} e - key pressed by user
+*/
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         32: 'space',
@@ -514,7 +589,11 @@ document.addEventListener('keyup', function(e) {
     }
 });
 
-// When Music icon is pressed
+// Pauses the Game and Start Modal
+game.pause = true;
+$('#modal-start').modal('show');
+
+// When Music icon is pressed, toggles music
 $('.music-icon').on('click', function(){
     // Toggle Music and Sfx
     game.music = !game.music;
@@ -539,10 +618,12 @@ $('.modal').on('click', function(){
     game.startModal();
 });
 
-$('#unpause').on('clock', function(){
+// When Switch Character button is pressed
+$('#unpause').on('click', function(){
     game.pause = false;
 });
 
+// When Switch Character button is pressed
 $('#other-character').on('click', function(){
     game.switchCharacter();
 });
