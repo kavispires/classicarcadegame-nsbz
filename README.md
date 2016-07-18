@@ -14,6 +14,7 @@ Help one of the Nerdstreet Boyz to reach the stage.
 #### Characters
 ----------------------------
 You will be assign one random Nerdstreet Boy, there are two of them: Pat and Brian, and they come in 3 different clothes.
+
 ![pat](images/char-pat.png)
 ![pat2](images/char-pat2.png)
 ![pat3](images/char-pat3.png)
@@ -25,6 +26,7 @@ You will be assign one random Nerdstreet Boy, there are two of them: Pat and Bri
 ----------------------------
 You need to collect **all** the CDs on the screen in order to be allowed on stage, after all, the Nerdstreet Boys don't sing live, they need the playback cds to lipsync to.
 On early levels there is only one CD to be collected, but they are added in order you are archieving new levels. Each CD grants you 10 extra poins, no matter the color.
+
 ![cd](images/cd-grey.png)
 ![cd](images/cd-green.png)
 ![cd](images/cd-gold.png)
@@ -36,9 +38,10 @@ _The order CDs are collected is irrelevant, so collect first the ones that are i
 #### Hazards
 ----------------------------
 Watch out for hazards! Crazy fans throw sharpy love letters and panties all the time, and sometimes even a plastic bottle may be thrown by a jealous boyfriend. The more famous you are, more haters you have on your neck.
-![loveletter](images/hazard-loveletter.png) Slow
-![panties](images/hazard-panties.png) Normal Speed
-![cd](images/hazard-bottle.png) Fastest Speed
+
+![loveletter](images/hazard-loveletter.png)
+![panties](images/hazard-panties.png)
+![cd](images/hazard-bottle.png)
 
 _When a hazard touches you, you lose a life and your position is reset. You do NOT need to collect previous collected CDs, just the remaining ones._
 
