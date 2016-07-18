@@ -69,4 +69,6 @@ When paused, you may randomly assign another Nerdstreet Character at random to c
 ----------------------------
 You may turn off sound by clicking the speaker icon button in the top left bar.
 
-_If you wish to disable **only** the music, but keep sound effects, you can hit the ``m`` key on your keyboard.
+__If you wish to disable **only** the music, but keep sound effects, you can hit the ``m`` key on your keyboard.__
+
+### Good Luck and great concert!
