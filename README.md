@@ -55,3 +55,18 @@ _But be aware that hazards can go through Security Guards and still hit you._
 #### Extra Life
 ----------------------------
 You gain 1 extra life (maximum of 3) every 10 levels you complete.
+
+#### Game Over
+----------------------------
+Everytime you loses all 3 lives, the game is over and you can restart from the beginning. Moreover, you will be reassigned a new character.
+
+#### Pause Menu
+----------------------------
+You may pause the game at any time by hitting the ``space bar`` or the ``p`` key on your keyboard.
+When paused, you may randomly assign another Nerdstreet Character at random to continue the game.
+
+#### Music & Sound Effects
+----------------------------
+You may turn off sound by clicking the speaker icon button in the top left bar.
+
+_If you wish to disable **only** the music, but keep sound effects, you can hit the ``m`` key on your keyboard.
