@@ -10,7 +10,9 @@
 
 ### How to Play
 
-Help one of the Nerdstreet Boyz to reach the stage.
+Help one of the Nerdstreet Boyz to reach the stage. Use the arrows on your keyboard to move your character around.
+
+_This game is designed for desktop computers._
 
 #### Characters
 ----------------------------
