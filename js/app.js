@@ -1,23 +1,24 @@
+'use strict';
+
 /**
 * @description Class Game that holds all basic info about the game.
 */
 var Game = function() {
-    this.pause = false;
+    this.pause = true;
     // Units
-    this.xUnit = 101;
-    this.yUnit = 83;
-    this.screenLimit = [505, 606];
+    this.X_UNIT = 101;
+    this.Y_UNIT = 83;
+    this.SCREEN_LIMIT = [505, 606];
     //Player
     this.level = 1;
     this.lives = 3;
     this.score = 0;
-    this.player = ['images/char-pat.png', 'images/char-bri.png','images/char-pat2.png', 'images/char-bri2.png','images/char-pat3.png', 'images/char-bri3.png'];
-    this. selectedCharacter = 0;
+    this.PLAYER = ['images/char-pat.png', 'images/char-bri.png','images/char-pat2.png', 'images/char-bri2.png','images/char-pat3.png', 'images/char-bri3.png'];
     // Sounds
     this.sfx = true;
     this.music = true;
     // Hazards object data
-    this.hazards = [{
+    this.HAZARDS = [{
         sprite: 'images/hazard-loveletter.png',
         speed: 50.5,
     }, {
@@ -28,7 +29,7 @@ var Game = function() {
         speed: 303,
     }];
     // CD object data
-    this.items = [{
+    this.ITEMS = [{
         sprite: 'images/cd-grey.png',
         points: 5,
     },
@@ -55,9 +56,9 @@ var Game = function() {
     // Array that keeps track only of cds only
     this.cdGrid = [];
     // Array of possible placements for items (cds and guards)
-    this.itemGrid = [[0,1],[1,1],[2,1],[3,1],[4,1],[0,2],[1,2],[2,2],[3,2],[4,2],[0,3],[1,3],[2,3],[3,3],[4,3]];
+    this.ITEM_GRID = [[0,1],[1,1],[2,1],[3,1],[4,1],[0,2],[1,2],[2,2],[3,2],[4,2],[0,3],[1,3],[2,3],[3,3],[4,3]];
     // Guards positions follows a pattern so the game is always 'completable'
-    this.guardpositions = [[12],[6,8],[0,4],[7],[5,9],[11,13],[2],[1,3],[10,14],[2,12],[7,11,13],[0,10],[5,2,9],[4,14],[5,9,12],[1,11],[0,12,10],[3,13],[0,4,11,13],[0,4,10,14],[0,2,4,12],[10,12,14,13],[10,11,13,14],[0,2,4,11,13],[0,1,3,4],[10,1,12,3,14],[0,1,3,4,5,9],[0,1,3,4,5,9,10,12,14],[0,1,2,4,5,9,10,12,13,14]];
+    this.GUARD_POSITIONS = [[12],[6,8],[0,4],[7],[5,9],[11,13],[2],[1,3],[10,14],[2,12],[7,11,13],[0,10],[5,2,9],[4,14],[5,9,12],[1,11],[0,12,10],[3,13],[0,4,11,13],[0,4,10,14],[0,2,4,12],[10,12,14,13],[10,11,13,14],[0,2,4,11,13],[0,1,3,4],[10,1,12,3,14],[0,1,3,4,5,9],[0,1,3,4,5,9,10,12,14],[0,1,2,4,5,9,10,12,13,14]];
 };
 
 /**
@@ -80,18 +81,18 @@ Game.prototype.randomRange = function(start, end) {
 };
 
 /**
-* @description Randomizes Hazard type on a 1/100 chance plus game.level. Making higher levels return faster enemies
+* @description Randomizes Hazard type on a 1/100 chance plus this.level. Making higher levels return faster enemies
 * @returns {number} Random Number from 0 to 2
 */
 Game.prototype.randomType = function() {
     // Assign Random Hazard Type
     var chance = Math.floor(Math.random() * 100) + 1;
-    chance += game.level * 2;
-    if(chance > 0 && chance <= 50){ // 50% of slow enemy
+    chance += this.level * 2;
+    if (chance <= 50){ // 50% of slow enemy
         console.log(chance+'% of love. Fan throws sharpy love letter.');
         return 0;
-    } else if (chance >= 51 && chance <= 90){ // 30% chance of faster enemy
-        console.log(chance+'% of evil. Fan throws smelly panties.');
+    } else if (chance <= 90){ // 30% chance of faster enemy
+        console.log(chance+'% of crazy. Fan throws smelly panties.');
         return 1;
     } else { // 20% of fastest enemy
         console.log(chance+'% of evil. Jealous boyfriend throws empty bottle.');
@@ -102,41 +103,43 @@ Game.prototype.randomType = function() {
 /**
 * @description Play/Pause main song in the index page
 */
-Game.prototype.mute = function(){
+Game.prototype.toggleMusic = function(){
     var song = document.getElementById('music');
-    return game.music ? song.play() : song.pause();
+    return this.music ? song.play() : song.pause();
 };
 
 /**
 * @description Adds CDs based on level number
 */
 Game.prototype.addCD = function(){
-    if (game.level <= 5){
-        allCDs = [new CD(0)];
-    } else if (game.level > 5 && game.level <= 10){
-        allCDs = [new CD(0), new CD(1)];
-    } else if (game.level > 10 && game.level <= 30){
-        allCDs = [new CD(0), new CD(1), new CD(2)];
-    } else if (game.level > 30 && game.level <= 40){
-        allCDs = [new CD(0), new CD(1), new CD(2), new CD(3)];
-    } else {
-        allCDs = [new CD(0), new CD(1), new CD(2), new CD(3), new CD(4)];
+    allCDs = [new CD(0)];
+    if (this.level > 5) {
+        allCDs.push(new CD(1));
+    }
+    if ( this.level > 10) {
+        allCDs.push(new CD(2));
+    }
+    if (this.level > 30) {
+        allCDs.push(new CD(3));
+    }
+    if (this.level > 40) {
+        allCDs.push(new CD(4));
     }
 };
 
 /**
 * @description Removes cds from their arrays that keeps track of them, and from allCDs. Adds 10 points to score per cd collected.
 */
-Game.prototype.removeCD = function(index,pos){
+Game.prototype.removeCD = function(index, pos){
     // Remove from cdGrid and usedGrid
-    var r = game.cdGrid.indexOf(pos);
-    game.cdGrid.splice(r, 1);
-    r = game.usedGrid.indexOf(pos);
-    game.usedGrid.splice(r, 1);
+    var r = this.cdGrid.indexOf(pos);
+    this.cdGrid.splice(r, 1);
+    r = this.usedGrid.indexOf(pos);
+    this.usedGrid.splice(r, 1);
     // Remove CD from allCDs
     allCDs.splice(index, 1);
-    // add 10 points to game.score
-    game.score += 10;
+    // add 10 points to this.score
+    this.score += 10;
 };
 
 /**
@@ -146,26 +149,28 @@ Game.prototype.addGuard = function() {
     // Remove all guards
     allGuards = [];
     // Clear usedGrid
-    game.usedGrid = [];
-    // If Level less than 30, get array of guard positions
+    this.usedGrid = [];
     var pattern;
-    if (game.level === 1) {
-    // Do nothing
-    } else if (game.level <= 30 && game.level > 1){
-        pattern = game.guardpositions[game.level-2];
+    // If Level 1, don't add guards, stop function
+    if (this.level === 1) {
+        return;
+    }
+    // If Level less than 30, get array of guard positions
+    if (this.level <= 30 && this.level > 1){
+        pattern = this.GUARD_POSITIONS[this.level-2];
     // Else, get random array
     } else {
-        pattern = game.guardpositions[game.randomNumber(30) - 1];
+        pattern = this.GUARD_POSITIONS[this.randomNumber(30) - 1];
     }
     // Add Guards
-    if (pattern !== undefined){ // This if line prevents error when game is reset
+    if (pattern){ // This if line prevents error when game is reset
         for (var a = 0; a <= pattern.length - 1; a++){
-        //Get Element in itemGrid
-        var gridpos = game.itemGrid[pattern[a]];
+        //Get Element in ITEM_GRID
+        var gridpos = this.ITEM_GRID[pattern[a]];
         allGuards.push(new Guard(gridpos[0],gridpos[1]));
         console.log('Guard added');
         // Add Patter elements to usedGrid
-        game.usedGrid.push(pattern[a]);
+        this.usedGrid.push(pattern[a]);
         }
     }
 };
@@ -177,14 +182,82 @@ Game.prototype.startModal = function(){
     //Hide Modal
     $('.modal').modal('hide');
     //Star Game
-    game.pause = false;
+    this.pause = false;
 };
 
 /**
 * @description Randomizes Number in a range
 */
 Game.prototype.switchCharacter = function(){
-    player.sprite = game.player[game.randomNumber(6) - 1];
+    player.sprite = this.PLAYER[this.randomNumber(6) - 1];
+};
+
+/**
+* @description When Player completes level, updates level count, score, and sfx;
+*/
+Game.prototype.levelUp = function(){
+    this.level++;
+    this.score += 50;
+    $('.helper').text('You reached the Stage! Level up!');
+    this.addGuard();
+    this.addCD();
+    // If sfx is on, play sound
+    if(this.sfx === true) {
+        var m = document.getElementById('sfx-levelup');
+        m.play();
+        m.loop = false;
+    }
+    // If level 10, 20, 30... give one life
+    if(this.level % 10 === 0 && this.lives < 3){
+        this.lives++;
+        $('.helper').text("You reached the Stage! Here's an extra heart.");
+    }
+    setTimeout(function(){
+        $('.helper').text('Go!');
+    }, 1500);
+};
+
+/**
+* @description When Player takes damage, updates lives count, score, and sfx;
+*/
+Game.prototype.damage = function(){
+    this.lives--;
+    this.score -= 25;
+    console.log('Damage!');
+    $('.helper').text('You took damage.');
+    // If sfx is on, play sound
+    if(this.sfx === true) {
+        var n = document.getElementById('sfx-damage');
+        n.play();
+        n.loop = false;
+    }
+};
+
+/**
+* @description When Game Over resets level, lives, score and clear arrays and game items
+*/
+Game.prototype.gameOver = function(){
+    console.log('GAME OVER');
+    $('.helper').text('Game Over. High Score: '+ this.score);
+    // Open modal
+    $('#modal-gameover').modal('show');
+    // Write High Score
+    $('#highscore').text(game.score);
+    // Reset Everything
+    this.level = 0;
+    this.lives = 3;
+    this.score = 0;
+    this.collectedCds = [];
+    this.usedGrid = [];
+    this.cdGrid= [];
+    // Remove all hazards, and create one new enemy
+    allHazards = [new Hazard()];
+    // Remove all cds, then create one new cd
+    allCDs = [new CD()];
+    // Remove all guards
+    allGuards = [];
+    // Assign a different skin/sprite
+    player.sprite = this.PLAYER[game.randomNumber(6) - 1];
 };
 
 /**
@@ -244,10 +317,7 @@ Stats.prototype.render = function() {
 * @description Class CD for the collectable items on screen (cds)
 */
 var CD = function(type) {
-    this.type = type;
-    if(type === undefined){
-        this.type = 0;
-    }
+    this.type = type || 0;
     // Assign CD Position
     // Get random number from 0 to 14
     // Check if number is in usedGrid
@@ -264,10 +334,10 @@ var CD = function(type) {
     // Array that keeps track only of crystals
     game.cdGrid.push(this.pos);
     // Assign X and Y
-    this.x = game.itemGrid[this.pos][0] * game.xUnit;
-    this.y = game.itemGrid[this.pos][1] * game.yUnit;
+    this.x = game.ITEM_GRID[this.pos][0] * game.X_UNIT;
+    this.y = game.ITEM_GRID[this.pos][1] * game.Y_UNIT;
     // Assign Sprite
-    this.sprite = game.items[this.type].sprite;
+    this.sprite = game.ITEMS[this.type].sprite;
 };
 
 /**
@@ -304,8 +374,8 @@ CD.prototype.render = function() {
 * @param {number} y - his y position in the grid
 */
 var Guard = function(x,y) {
-    this.x = x * game.xUnit;
-    this.y = y * game.yUnit;
+    this.x = x * game.X_UNIT;
+    this.y = y * game.Y_UNIT;
     // Assign Sprite
     this.sprite = 'images/char-security.png';
 };
@@ -315,16 +385,16 @@ var Guard = function(x,y) {
 */
 Guard.prototype.update = function() {
     // Block detection
+    var directionMapping = {
+        up: [0, 1],
+        down: [0, -1],
+        right: [-1, 0],
+        left: [1, 0]
+    };
     if (player.y === this.y && player.x === this.x){
-        if(player.direction == 'up'){
-            player.y += 83;
-        } else if(player.direction == 'right'){
-            player.x -= 101;
-        } else if(player.direction == 'down'){
-            player.y -= 83;
-        } else if(player.direction == 'left'){
-            player.x += 101;
-        }
+        var posDelta = directionMapping[player.direction];
+        player.x += posDelta[0] * 101;
+        player.y += posDelta[1] * 83;
     }
 };
 
@@ -342,12 +412,12 @@ var Hazard = function() {
     // Assign Hazard Type
     this.type = game.randomType();
     // Assign Starting Position
-    this.x = game.xUnit * game.randomNumber(3) * -1; // X position Off-Screen
-    this.y = game.yUnit * game.randomRange(1, 4);
+    this.x = game.X_UNIT * game.randomNumber(3) * -1; // X position Off-Screen
+    this.y = game.Y_UNIT * game.randomRange(1, 4);
     // Assign Speed
-    this.speed = game.hazards[this.type].speed;
+    this.speed = game.HAZARDS[this.type].speed;
     // Assign Sprite
-    this.sprite = game.hazards[this.type].sprite;
+    this.sprite = game.HAZARDS[this.type].sprite;
 };
 
 /**
@@ -361,22 +431,12 @@ Hazard.prototype.update = function(dt) {
     this.x += this.speed * dt;
     // When Hazard passes screen limit randomize its row,
     // plus randomize its respawn time
-    if (this.x > game.screenLimit[0]) {
+    if (this.x > game.SCREEN_LIMIT[0]) {
         // Reassign a random Row
-        this.y = game.yUnit * game.randomRange(1, 4);
+        this.y = game.Y_UNIT * game.randomRange(1, 4);
         // Reassign X position depending on type (so faster animals would take longer to reappear)
-        var i;
-        switch(this.type){
-            case 0:
-                i = 3;
-                break;
-            case 1:
-                i = 5;
-                break;
-            case 2:
-                i = 7;
-        }
-    this.x = game.xUnit * game.randomNumber(i) * -2;
+        var i = [3, 5, 7][this.type];
+        this.x = game.X_UNIT * game.randomNumber(i) * -2;
     }
 
     // Collision Detection
@@ -401,21 +461,21 @@ var Player = function() {
     // Type
     this.type = 0;
     // Player Starting Position
-    this.player_start_x = game.xUnit * 2;
-    this.player_start_y = game.yUnit * 5;
+    this.player_start_x = game.X_UNIT * 2;
+    this.player_start_y = game.Y_UNIT * 5;
     // Player Movement Increments
-    this.player_move_x = game.xUnit;
-    this.player_move_y = game.yUnit;
+    this.player_move_x = game.X_UNIT;
+    this.player_move_y = game.Y_UNIT;
     // Player Screen Limit
-    this.player_limit_top = game.yUnit * 1;
-    this.player_limit_right = game.xUnit * 4;
-    this.player_limit_bottom = game.yUnit * 5;
+    this.player_limit_top = game.Y_UNIT * 1;
+    this.player_limit_right = game.X_UNIT * 4;
+    this.player_limit_bottom = game.Y_UNIT * 5;
     this.player_limit_left = 0;
     // Player Position
     this.x = this.player_start_x;
     this.y = this.player_start_y;
     // Player Sprite
-    this.sprite = game.player[game.randomNumber(6) - 1];
+    this.sprite = game.PLAYER[game.randomNumber(6) - 1];
     // Play Direction
     this.direction = null;
 };
@@ -460,63 +520,14 @@ Player.prototype.resetPosition = function(val) {
     this.x = this.player_start_x;
     this.y = this.player_start_y;
     // Update Lives or Levels
-    switch (val) {
-        case 'levelup':
-            game.level++;
-            game.score += 50;
-            $('.helper').text('You reached the Stage! Level up!');
-            game.addGuard();
-            game.addCD();
-            // If sfx is on, play sound
-            if(game.sfx === true) {
-                var m = document.getElementById('sfx-levelup');
-                m.play();
-                m.loop = false;
-            }
-            // If level 10, 20, 30... give one life
-            if(game.level % 10 === 0 && game.lives < 3){
-                game.lives++;
-                $('.helper').text("You reached the Stage! Here's an extra heart.");
-            }
-            setTimeout(function(){
-                $('.helper').text('Go!');
-            }, 1500);
-            break;
-        case 'damage':
-            game.lives--;
-            game.score -= 25;
-            console.log('Damage!');
-            $('.helper').text('You took damage.');
-            // If sfx is on, play sound
-            if(game.sfx === true) {
-                var n = document.getElementById('sfx-damage');
-                n.play();
-                n.loop = false;
-            }
+    if (val == 'levelup') {
+        game.levelUp();
+    } else if (val == 'damage') {
+        game.damage();
     }
     // When player runs out of lives
     if (game.lives <= 0) {
-        console.log('GAME OVER');
-        $('.helper').text('Game Over. High Score: '+ game.score);
-        // Open modal
-        $('#modal-gameover').modal('show');
-        // Write High Score
-        $('#highscore').text(game.score);
-        // Reset Everything
-        game.level = 0;
-        game.lives = 3;
-        game.score = 0;
-        game.collectedCds = [];
-        game.usedGrid = [];
-        game.cdGrid= [];
-        // Remove all hazards, and create one new enemy
-        allHazards = [new Hazard()];
-        // Remove all cds, then create one new cd
-        allCDs = [new CD()];
-        // Remove all guards
-        allGuards = [];
-        // Assign a different skin/sprite
-        this.sprite = game.player[game.randomNumber(6) - 1];
+        game.gameOver();
     }
 };
 
@@ -562,35 +573,31 @@ var stats = new Stats();
 */
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
-        32: 'space',
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down',
-        18: 'p',
-        77: 'm',
-        70: 'f'
     };
 
     // Toggle Music
     if (e.keyCode === 77) {
         game.music = !game.music;
-        game.mute();
+        game.toggleMusic();
     }
 
-    //Pause Game
+    // Pause Game
     if (e.keyCode === 32 || e.keyCode === 18) {
         game.pause = !game.pause;
         $('#modal-pause').modal('toggle');
     }
 
-    if (game.pause === false) {
+    // Calls handleInput only if game is not paused
+    if (!game.pause) {
         player.handleInput(allowedKeys[e.keyCode]);
     }
 });
 
-// Pauses the Game and Start Modal
-game.pause = true;
+// Start Modal
 $('#modal-start').modal('show');
 
 // When Music icon is pressed, toggles music
@@ -598,18 +605,18 @@ $('.music-icon').on('click', function(){
     // Toggle Music and Sfx
     game.music = !game.music;
     game.sfx = !game.sfx;
-    game.mute();
+    game.toggleMusic();
     //Change icon
     $(this).toggleClass('glyphicon-volume-up');
     $(this).toggleClass('glyphicon-volume-off');
 });
 
 //Close modal and start game
-$('#start-game').on('click', function(){
+$('#start-game').on('click',  function(){
     game.startModal();
 });
 
-$('#restart-game').on('click', function(){
+$('#restart-game').on('click',function(){
     game.startModal();
 });
 
@@ -624,6 +631,6 @@ $('#unpause').on('click', function(){
 });
 
 // When Switch Character button is pressed
-$('#other-character').on('click', function(){
+$('#other-character').on('click',function(){
     game.switchCharacter();
 });
