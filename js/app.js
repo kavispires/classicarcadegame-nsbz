@@ -314,9 +314,24 @@ Stats.prototype.render = function() {
 };
 
 /**
+* @description Super Class Game Object
+*/
+var GameObjects = function() {};
+
+/**
+* @description Renders sprite on canvas.
+*/
+GameObjects.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+
+};
+
+/**
 * @description Class CD for the collectable items on screen (cds)
 */
 var CD = function(type) {
+    GameObjects.call(this);
+    // Assign Type
     this.type = type || 0;
     // Assign CD Position
     // Get random number from 0 to 14
@@ -340,6 +355,9 @@ var CD = function(type) {
     this.sprite = game.ITEMS[this.type].sprite;
 };
 
+CD.prototype = Object.create(GameObjects.prototype);
+CD.prototype.constructor = CD;
+
 /**
 * @description Detects CD collecting by the player and removes it when done.
 */
@@ -362,23 +380,21 @@ CD.prototype.update = function() {
 };
 
 /**
-* @description Renders CDs on screen.
-*/
-CD.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-/**
 * @description Class for Guards (elements that blocks the player in the game grid)
 * @param {number} x - his x position in the grid
 * @param {number} y - his y position in the grid
 */
 var Guard = function(x,y) {
+    GameObjects.call(this);
+    // Assign Position
     this.x = x * game.X_UNIT;
     this.y = y * game.Y_UNIT;
     // Assign Sprite
     this.sprite = 'images/char-security.png';
 };
+
+Guard.prototype = Object.create(GameObjects.prototype);
+Guard.prototype.constructor = Guard;
 
 /**
 * @description Prevents player from crossing over a Guard
@@ -399,16 +415,10 @@ Guard.prototype.update = function() {
 };
 
 /**
-* @description Renders Guards on screen.
-*/
-Guard.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-/**
 * @description Class for Hazards on screen (love letters, panties and bottles)
 */
 var Hazard = function() {
+    GameObjects.call(this);
     // Assign Hazard Type
     this.type = game.randomType();
     // Assign Starting Position
@@ -419,6 +429,9 @@ var Hazard = function() {
     // Assign Sprite
     this.sprite = game.HAZARDS[this.type].sprite;
 };
+
+Hazard.prototype = Object.create(GameObjects.prototype);
+Hazard.prototype.constructor = Hazard;
 
 /**
 * @description Updates Hazard position, detects collision with player, and reassign a new row for the enemy to respawn, as well as, when the hazard will show up on screen (by assigning a -x off screen value to it)
@@ -448,16 +461,10 @@ Hazard.prototype.update = function(dt) {
 };
 
 /**
-* @description Renders Hazard on screen
-*/
-Hazard.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-/**
 * @description Class for Player
 */
 var Player = function() {
+    GameObjects.call(this);
     // Type
     this.type = 0;
     // Player Starting Position
@@ -479,6 +486,9 @@ var Player = function() {
     // Play Direction
     this.direction = null;
 };
+
+Player.prototype = Object.create(GameObjects.prototype);
+Player.prototype.constructor = Player;
 
 /**
 * @description Limits player on off-screen movements, and check winning conditions.
@@ -529,13 +539,6 @@ Player.prototype.resetPosition = function(val) {
     if (game.lives <= 0) {
         game.gameOver();
     }
-};
-
-/**
-* @description Renders Player on screen.
-*/
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 /**
