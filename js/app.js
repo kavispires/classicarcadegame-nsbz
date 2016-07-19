@@ -242,7 +242,7 @@ Game.prototype.gameOver = function(){
     // Open modal
     $('#modal-gameover').modal('show');
     // Write High Score
-    $('#highscore').text(game.score);
+    $('#highscore').text(this.score);
     // Reset Everything
     this.level = 0;
     this.lives = 3;
@@ -257,7 +257,7 @@ Game.prototype.gameOver = function(){
     // Remove all guards
     allGuards = [];
     // Assign a different skin/sprite
-    player.sprite = this.PLAYER[game.randomNumber(6) - 1];
+    player.sprite = this.PLAYER[this.randomNumber(6) - 1];
 };
 
 /**
