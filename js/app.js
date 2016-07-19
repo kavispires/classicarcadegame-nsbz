@@ -553,6 +553,8 @@ Player.prototype.handleInput = function(key) {
         left: [-1, 0],
         right: [1, 0],
     };
+    //Stops code if key is not in direction
+    if (!(key in direction)) return;
     // Move player
     this.x += direction[key][0] * this.player_move_x;
     this.y += direction[key][1] * this.player_move_y;
