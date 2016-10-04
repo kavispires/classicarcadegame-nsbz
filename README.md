@@ -14,8 +14,8 @@ Help one of the Nerdstreet Boyz to reach the stage. Use the arrows on your keybo
 
 _This game is designed for desktop computers._
 
-#### Characters
 ----------------------------
+#### Characters
 You will be assign one random Nerdstreet Boy, there are two of them: Pat and Brian, and they come in 3 different clothes.
 
 ![pat](images/char-pat.png)
