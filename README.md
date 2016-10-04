@@ -25,8 +25,8 @@ You will be assign one random Nerdstreet Boy, there are two of them: Pat and Bri
 ![bri2](images/char-bri2.png)
 ![bri3](images/char-bri3.png)
 
-#### Collectables
 ----------------------------
+#### Collectables
 You need to collect **all** the CDs on the screen in order to be allowed on stage, after all, the Nerdstreet Boys don't sing live, they need the playback cds to lipsync to.
 On early levels there is only one CD to be collected, but they are added in order you are archieving new levels. Each CD grants you 10 extra poins, no matter the color.
 
@@ -48,29 +48,31 @@ Watch out for hazards! Crazy fans throw sharpy love letters and panties all the 
 
 _When a hazard touches you, you lose a life and your position is reset. You do NOT need to collect previous collected CDs, just the remaining ones._
 
-#### Security Guards
 ----------------------------
+#### Security Guards
 The security guards are there to help you. Eh... I mean, they actually just block the way. That's what happens when you hire the cheapest security firm.
+
+![security](images/char-security.png)
 
 _But be aware that hazards can go through Security Guards and still hit you._
 
-#### Extra Life
 ----------------------------
+#### Extra Life
 You gain 1 extra life (maximum of 3) every 10 levels you complete.
 
-#### Game Over
 ----------------------------
+#### Game Over
 Everytime you loses all 3 lives, the game is over and you can restart from the beginning. Moreover, you will be reassigned a new character.
 
-#### Pause Menu
 ----------------------------
+#### Pause Menu
 You may pause the game at any time by hitting the ``space bar`` or the ``p`` key on your keyboard.
 When paused, you may randomly assign another Nerdstreet Character at random to continue the game.
 
-#### Music & Sound Effects
 ----------------------------
+#### Music & Sound Effects
 You may turn off sound by clicking the speaker icon button in the top left bar.
 
 _If you wish to disable **only** the music, but keep sound effects, you can hit the ``m`` key on your keyboard._
 
-### Good Luck and great concert!
+### Good Luck and have a great concert!
