@@ -6,7 +6,7 @@
 ### How to Run
 - Download the application from [github](https://github.com/kavispires/classicarcadegame-nsbz).
 - Open ```index.html``` to start the game.
-- You may play a live version of the game from [dropbox](https://db.tt/ldZ820vK)
+- You may play a live version [here](https://kavispires.github.io/classicarcadegame-nsbz/)
 
 ### How to Play
 
