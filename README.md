@@ -4,9 +4,9 @@
 ![banner](images/banner.png)
 
 ### How to Run
-- Download the application from [github](https://github.com/kavispires/classicarcadegame-nsbz).
+- Download the application from [github](https://github.com/kavispires/nsbz-hit-the-stage).
 - Open ```index.html``` to start the game.
-- You may play a live version [here](https://kavispires.github.io/classicarcadegame-nsbz/).
+- You may play a live version [here](https://kavispires.github.io/nsbz-hit-the-stage/).
 
 ### How to Play
 
